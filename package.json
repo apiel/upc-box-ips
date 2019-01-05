@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node index.js",
     "status": "systemctl status upc-box-ips.service",
     "prod": "sudo systemctl start upc-box-ips",
     "stop": "sudo systemctl stop upc-box-ips",
