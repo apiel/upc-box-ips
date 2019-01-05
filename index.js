@@ -30,19 +30,12 @@ const { password } = require('./config');
     console.log('devices list is there');
     await page.screenshot({ path: 'screenshots2.png' });
 
-    // const rows = await page.$$eval('table tr', row => {
-    //     console.log('row.innerHTML', row.innerHTML);
-    //     return row;
-    // }); //#lanUsers-tbody tr.clientinfo
-    // console.log('rows', rows);
-
-    // // Extract the results from the page
     const rows = await page.evaluate(() => {
       const trs = Array.from(document.querySelectorAll('#lanUsers-tbody tr[name=clientinfo]'));
       return trs.map(tr => {
         const tds = Array.from(tr.querySelectorAll('td'));
-        return tds.map(td => td.innerText);
-        // return tr.innerHTML;
+        const [ name, mac, ip, speed, wifi ] = tds.map(td => td.innerText);
+        return { name, mac, ip, speed, wifi };
       });
     });
     console.log('rows', rows);
