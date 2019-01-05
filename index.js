@@ -30,12 +30,22 @@ const { password } = require('./config');
     console.log('devices list is there');
     await page.screenshot({ path: 'screenshots2.png' });
 
+    // const rows = await page.$$eval('table tr', row => {
+    //     console.log('row.innerHTML', row.innerHTML);
+    //     return row;
+    // }); //#lanUsers-tbody tr.clientinfo
+    // console.log('rows', rows);
+
     // // Extract the results from the page
-    // const links = await page.evaluate(() => {
-    //   const anchors = Array.from(document.querySelectorAll('.result-link a'));
-    //   return anchors.map(anchor => anchor.textContent);
-    // });
-    // console.log(links.join('\n'));
+    const rows = await page.evaluate(() => {
+      const trs = Array.from(document.querySelectorAll('#lanUsers-tbody tr[name=clientinfo]'));
+      return trs.map(tr => {
+        const tds = Array.from(tr.querySelectorAll('td'));
+        return tds.map(td => td.innerText);
+        // return tr.innerHTML;
+      });
+    });
+    console.log('rows', rows);
 
     browser.close();
 
