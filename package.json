@@ -4,7 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js",
+    "status": "systemctl status upc-box-ips.service",
+    "prod": "sudo systemctl start upc-box-ips",
+    "stop": "sudo systemctl stop upc-box-ips",
+    "restart": "sudo systemctl restart upc-box-ips",
+    "log": "journalctl -u upc-box-ips.service -f"
   },
   "dependencies": {
     "puppeteer": "^1.11.0"

@@ -45,3 +45,4 @@ async function start() {
 }
 
 start();
+setInterval(start, 60000); // every min
