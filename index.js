@@ -4,8 +4,8 @@ const fs = require('fs');
 const { password } = require('./config');
 
 async function start() {
-
-    const browser = await puppeteer.launch();
+    const executablePath = '/usr/bin/chromium-browser';
+    const browser = await puppeteer.launch({ executablePath });
     const page = await browser.newPage();
     await page.goto('http://192.168.0.1/common_page/login.html', {waitUntil: 'networkidle0'});
 
