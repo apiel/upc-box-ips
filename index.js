@@ -17,16 +17,23 @@ async function start() {
     await page.type('input[name=loginPassword]', String.fromCharCode(13));
     console.log('enter pressed');
 
-    await page.waitForNavigation( { waitUntil : 'networkidle0' } );
+    await page.waitFor(10000);
+    // await page.waitForNavigation( { waitUntil : 'networkidle0' } );
+ 
     console.log('login done, we are now to home page');
     await page.screenshot({ path: 'screenshots1.png' });
 
     console.log('click to see connected devices');
-    await page.click('a[name="common_page/DeviceConnectionStatus"]');
-
-    await page.waitForSelector('#deviceTable');
+    // await page.click('a[name="common_page/DeviceConnectionStatus"]'); // for some reason this not working on rpi
+    // await page.evaluate(() => goto('common_page/DeviceConnectionStatus.html', 'content')); // this is not working in pupperteer and console browser
+    await page.evaluate(() => {
+      const a = document.querySelector('a[name="common_page/DeviceConnectionStatus"]');
+      a.click();
+    });
+    // await page.waitForSelector('#deviceTable');
 
     await page.waitFor(2000);
+    // await page.waitFor(10000);
     console.log('devices list is there');
     await page.screenshot({ path: 'screenshots2.png' });
 
@@ -42,7 +49,8 @@ async function start() {
     fs.writeFileSync('devices.json', JSON.stringify(devices, null, 4));
 
     browser.close();
+
+    setTimeout(start, 60000);
 }
 
 start();
-setInterval(start, 60000); // every min
