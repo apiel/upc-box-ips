@@ -1,7 +1,9 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
+
 const { password } = require('./config');
 
-(async() => {
+async function start() {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -19,10 +21,8 @@ const { password } = require('./config');
     console.log('login done, we are now to home page');
     await page.screenshot({ path: 'screenshots1.png' });
 
-
     console.log('click to see connected devices');
     await page.click('a[name="common_page/DeviceConnectionStatus"]');
-    // await page.waitFor(2000);
 
     await page.waitForSelector('#deviceTable');
 
@@ -30,7 +30,7 @@ const { password } = require('./config');
     console.log('devices list is there');
     await page.screenshot({ path: 'screenshots2.png' });
 
-    const rows = await page.evaluate(() => {
+    const devices = await page.evaluate(() => {
       const trs = Array.from(document.querySelectorAll('#lanUsers-tbody tr[name=clientinfo]'));
       return trs.map(tr => {
         const tds = Array.from(tr.querySelectorAll('td'));
@@ -38,8 +38,10 @@ const { password } = require('./config');
         return { name, mac, ip, speed, wifi };
       });
     });
-    console.log('rows', rows);
+    console.log('devices', devices);
+    fs.writeFileSync('devices.json', JSON.stringify(devices, null, 4));
 
     browser.close();
+}
 
-})();
+start();
